@@ -31,17 +31,17 @@ export function UserProfile({ user }: UserProfileProps) {
               <Image src={GitHubIcon} alt='GitHub' width='24' height='24' />
             </a>
           </div>
-          <div className='mt-2 text-neutral-600 flex space-x-4'>
+          <div className='mt-2 text-neutral-600 text-sm flex space-x-4'>
             <span>{user.followers} followers</span>
             <span>{user.following} following</span>
           </div>
           {user.location && (
-            <div className='mt-2 flex items-center text-neutral-600 space-x-1'>
+            <div className='mt-2 flex items-center text-neutral-600 text-sm space-x-1'>
               <Image src={LocationIcon} alt='Location' width='19' height='19' />
               <span>{user.location}</span>
             </div>
           )}
-          {user.bio && <p className='mt-2 text-neutral-600'>{user.bio}</p>}
+          {user.bio && <p className='mt-2 text-sm text-neutral-600'>{user.bio}</p>}
         </div>
       </div>
     </div>
