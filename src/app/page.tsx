@@ -1,101 +1,104 @@
-import Image from "next/image";
+'use client';
+
+import { ErrorMessage } from '@/components/ErrorMessage';
+import { Spinner } from '@/components/Spinner';
+import { useGitHubUserData } from '@/hooks/useGitHubUserData';
+import { useUserDataStore } from '@/store/useUserDataStore';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const setState = useUserDataStore((state) => state.setState);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const [username, setUsername] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [searchTrigger, setSearchTrigger] = useState('');
+  const {
+    user,
+    loading,
+    error: userDataError,
+  } = useGitHubUserData(searchTrigger);
+
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Initial validation for username
+    const regex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i;
+    if (!regex.test(username)) {
+      setSearchTrigger('');
+      return;
+    }
+
+    setSearchTrigger(username);
+  };
+
+  useEffect(() => {
+    if (!loading && !userDataError && user && searchTrigger) {
+      setState({ userData: user, loading: loading });
+      router.push(`/user/${searchTrigger}`);
+    }
+
+    const errorParam = searchParams.get('error');
+    if (errorParam || userDataError) {
+      setErrorMessage(errorParam ?? userDataError);
+    }
+  }, [
+    loading,
+    user,
+    searchTrigger,
+    userDataError,
+    searchParams,
+    router,
+    setState,
+  ]);
+
+  return (
+    <main className='min-h-screen flex flex-col items-center justify-center bg-gray-100'>
+      {errorMessage && (
+        <div className='max-w-md w-full mb-10'>
+          <ErrorMessage message={errorMessage} />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      )}
+      <div className='max-w-md w-full p-6 bg-white rounded-lg shadow-lg'>
+        <h1 className='text-2xl font-bold text-center mb-6 text-neutral-700'>
+          GitHub User Finder
+        </h1>
+
+        <form onSubmit={handleSearch} className='space-y-4'>
+          <div>
+            <label htmlFor='username' className='sr-only'>
+              GitHub Username
+            </label>
+            <input
+              id='username'
+              value={username}
+              type='text'
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder='E.g: vitorvasc'
+              aria-label='GitHub Username'
+              className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-neutral-500'
+              disabled={loading}
+            />
+          </div>
+
+          <button
+            type='submit'
+            className='w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed'
+            disabled={loading}
+          >
+            {loading ? (
+              <span className='flex items-center justify-center'>
+                <Spinner />
+                Searching...
+              </span>
+            ) : (
+              'Search'
+            )}
+          </button>
+        </form>
+      </div>
+    </main>
   );
 }
