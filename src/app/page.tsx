@@ -43,6 +43,7 @@ export default function Home() {
     const errorParam = searchParams.get('error');
     if (errorParam || userDataError) {
       setErrorMessage(errorParam ?? userDataError);
+      router.replace('/');
     }
   }, [
     loading,
