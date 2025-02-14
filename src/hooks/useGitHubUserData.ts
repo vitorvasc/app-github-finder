@@ -15,40 +15,20 @@ export function useGitHubUserData(username: string) {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!username) return;
+
+      setLoading(true);
+      setError('');
+
       try {
-        if (!username) return;
+        const response = await fetch(`/api/github/user/${username}`);
+        const data = await response.json();
 
-        setLoading(true);
-        setError('');
-
-        const headers = buildHeaders();
-        const userResponse = await fetch(
-          `https://api.github.com/users/${username}`,
-          { headers }
-        );
-
-        if (!userResponse.ok) {
-          let errorMessage: string;
-
-          switch (userResponse.status) {
-            case 403:
-              errorMessage =
-                'API rate limit exceeded. Please, try again later.';
-              break;
-            case 404:
-              errorMessage = 'User not found.';
-              break;
-            default:
-              errorMessage = 'Failed to fetch user data.';
-              break;
-          }
-
-          throw new Error(errorMessage);
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to fetch user data');
         }
 
-        const userData = await userResponse.json();
-
-        setUser(userData);
+        setUser(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error ocurred');
       } finally {
@@ -69,40 +49,20 @@ export function useGitHubUserReposData(username: string) {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!username) return;
+
+      setLoading(true);
+      setError('');
+
       try {
-        if (!username) return;
+        const response = await fetch(`/api/github/user/${username}/repos`);
+        const data = await response.json();
 
-        setLoading(true);
-        setError('');
-
-        const headers = buildHeaders();
-        const userReposResponse = await fetch(
-          `https://api.github.com/users/${username}/repos`,
-          { headers }
-        );
-
-        if (!userReposResponse.ok) {
-          let errorMessage: string;
-
-          switch (userReposResponse.status) {
-            case 403:
-              errorMessage =
-                'API rate limit exceeded. Please, try again later.';
-              break;
-            case 404:
-              errorMessage = 'User not found.';
-              break;
-            default:
-              errorMessage = 'Failed to fetch user data.';
-              break;
-          }
-
-          throw new Error(errorMessage);
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to fetch user data');
         }
 
-        const reposData = await userReposResponse.json();
-
-        setRepos(reposData);
+        setRepos(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error ocurred');
       } finally {
