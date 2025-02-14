@@ -15,9 +15,12 @@ export async function GET(
 
   try {
     const headers = buildHeaders();
-    const response = await fetch(`${process.env.GITHUB_API_BASE_URL}/users/${username}`, {
-      headers,
-    });
+    const response = await fetch(
+      `${process.env.GITHUB_API_BASE_URL}/users/${username}`,
+      {
+        headers,
+      }
+    );
 
     if (!response.ok) {
       let errorMessage: string;
@@ -41,7 +44,10 @@ export async function GET(
     return NextResponse.json(data);
   } catch (err) {
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Failed to fetch user' },
+      {
+        error:
+          err instanceof Error ? err.message : 'Failed to fetch user data.',
+      },
       { status: 500 }
     );
   }

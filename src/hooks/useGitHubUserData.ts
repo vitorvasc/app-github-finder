@@ -1,13 +1,6 @@
 import { User, Repository } from '@/types';
 import { useEffect, useState } from 'react';
 
-const buildHeaders = () => {
-  return {
-    Authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
-    Accept: 'application/vnd.github.v3+json',
-  };
-};
-
 export function useGitHubUserData(username: string) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);

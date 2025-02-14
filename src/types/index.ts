@@ -13,7 +13,6 @@ export interface Repository {
   id: number;
   name: string;
   description: string | null;
-  fork: boolean;
   stargazers_count: number;
   watchers_count: number;
   html_url: string;
