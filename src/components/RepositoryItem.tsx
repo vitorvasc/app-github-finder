@@ -13,7 +13,6 @@ interface RepositoryItemProps {
 }
 
 export function RepositoryItem({
-  id,
   name,
   description,
   url,
@@ -21,7 +20,7 @@ export function RepositoryItem({
   watchers_count,
 }: RepositoryItemProps) {
   return (
-    <li key={id} className='py-3 sm:py-4'>
+    <li className='py-3 sm:py-4'>
       <div className='flex items-center space-x-4 rtl:space-x-reverse'>
         <div className='shrink-0'>
           <Image src={RepositoryIcon} alt='Repository' />

@@ -47,17 +47,22 @@ export function RepositoryList({ repositories }: RepositoryListProps) {
         </div>
       </div>
 
-      <ul className='max-w md bg-white rounded-lg shadow-lg p-6 divide-y divide-gray-200'>
+      <ul
+        className='max-w md bg-white rounded-lg shadow-lg p-6 divide-y divide-gray-200'
+        role='list'
+        aria-label='Repositories list'
+      >
         {sortedRepositories.map((repo) => (
-          <RepositoryItem
-            key={repo.id}
-            id={repo.id}
-            url={repo.html_url}
-            name={repo.name}
-            description={repo.description}
-            stars_count={repo.stargazers_count}
-            watchers_count={repo.watchers_count}
-          />
+          <li key={repo.id} role='listitem' aria-label={repo.name}>
+            <RepositoryItem
+              id={repo.id}
+              url={repo.html_url}
+              name={repo.name}
+              description={repo.description}
+              stars_count={repo.stargazers_count}
+              watchers_count={repo.watchers_count}
+            />
+          </li>
         ))}
       </ul>
     </div>

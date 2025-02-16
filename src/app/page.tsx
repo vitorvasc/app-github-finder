@@ -77,7 +77,7 @@ export default function Home() {
               value={username}
               type='text'
               onChange={(e) => setUsername(e.target.value)}
-              placeholder='E.g: vitorvasc'
+              placeholder='Search'
               aria-label='GitHub Username'
               className='w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-neutral-500'
               disabled={loading}
