@@ -24,10 +24,16 @@ export default function Home() {
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!username) {
+      setSearchTrigger('');
+      setErrorMessage('Please, inform a valid username');
+    }
+
     // Initial validation for username
     const regex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i;
     if (!regex.test(username)) {
       setSearchTrigger('');
+      setErrorMessage('Please, inform a valid username');
       return;
     }
 
