@@ -16,7 +16,7 @@ export async function GET(
   try {
     const headers = buildHeaders();
     const response = await fetch(
-      `${process.env.GITHUB_API_BASE_URL}/users/${username}/repos`,
+      `https://api.github.com/users/${username}/repos`,
       { headers }
     );
 
