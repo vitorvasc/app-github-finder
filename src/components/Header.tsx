@@ -1,5 +1,4 @@
 import GitHubIcon from '@/assets/icons/github.svg';
-import HomeIcon from '@/assets/icons/home.svg';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -13,8 +12,6 @@ export function Header() {
               href='/'
               className='flex items-center space-x-2 text-neutral-700 hover:text-blue-500 transition-colors'
             >
-              <Image src={HomeIcon} alt='Home' width='24' height='24' />
-
               <span className='font-semibold'>Home</span>
             </Link>
           </div>
