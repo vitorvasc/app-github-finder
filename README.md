@@ -2,6 +2,10 @@
 
 A web application built with Next.js that allows you to search and expore GitHub repositories.
 
+## Live Demo
+
+This repository is available for a Live Demo: https://github.vasconcellos.tech
+
 ## ✨ Features
 
 - Real-time GitHub repository search
