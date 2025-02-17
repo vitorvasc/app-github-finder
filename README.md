@@ -34,7 +34,9 @@ cd app-github-finder
 
 3. Create a `.env` file in the root directory:
 
-```GITHUB_TOKEN=your_github_personal_access_token```
+```env
+GITHUB_TOKEN=your_github_personal_access_token
+```
 
 4. Start the development server:
 
